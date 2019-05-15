@@ -1,0 +1,1801 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package CustomerInterfaces;
+
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.sun.org.apache.xpath.internal.operations.Gt;
+import java.awt.Font;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+import DBConnect.DBconnect;
+import mainInterface.MainPage;
+import net.proteanit.sql.DbUtils;
+
+/**
+ *
+ * @author Bhagi97
+ */
+public class OrderDetails extends javax.swing.JFrame {
+
+    
+    Connection con = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    /**
+     * Creates new form orderDetails
+     */
+    public OrderDetails() {
+        initComponents();
+        
+        //connect to db
+        con = DBconnect.getConnection();
+        
+        updateCombo();
+        updateCombo2();
+        
+        //load table
+        tableLoad01();
+        tableLoad02();
+        tableLoad03();
+        tableLoad04();
+    }
+
+    private void updateCombo(){
+        String sql = "SELECT * FROM customer";
+        try {
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+            while(rs.next()){
+               cidBox.addItem(rs.getString("cid"));
+           
+            }
+            
+        } catch (Exception e) {
+        }
+    }
+    
+    private void updateCombo2(){
+        String sql = "SELECT * FROM customer";
+        try {
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+            while(rs.next()){
+               cidBox02.addItem(rs.getString("cid"));
+           
+            }
+            
+        } catch (Exception e) {
+        }
+    }
+    
+    public void tableLoad01(){
+        try {
+            String sql = "SELECT OID,CID,Date,Grade,Quantity,Price,Total FROM orders";
+            pst = con.prepareStatement(sql);
+            
+            rs = pst.executeQuery();
+            
+            oTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+        }
+        
+        
+    }
+    
+    public void tableLoad02(){
+        try {
+            String sql = "SELECT OID,CID,Date,Grade,Quantity,Price,Total FROM orders";
+            pst = con.prepareStatement(sql);
+            
+            rs = pst.executeQuery();
+            
+            oTable2.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+        }
+        
+        
+    }
+    
+    public void clear(){
+        cidBox.setSelectedIndex(0);
+        jDateChooser1.setDate(null);
+        gradeBox.setSelectedIndex(0);
+        qtyBox.setText("");
+        priceBox.setText("");
+        totBox.setText("");
+    }
+    
+    
+    public void demoOrder(){
+        cidBox.setSelectedIndex(4);
+        jDateChooser1.setDate(null);
+        gradeBox.setSelectedIndex(3);
+        qtyBox.setText("500");
+        priceBox.setText("1000");
+        
+    }
+    
+    public void clear2(){
+        oidBox02.setText("");
+        cidBox02.setSelectedIndex(0);
+        jDateChooser2.setDate(null);
+        gradeBox02.setSelectedIndex(0);
+        qtyBox02.setText("");
+        priceBox02.setText("");
+        totBox02.setText("");
+    }
+    
+    
+    
+    public void tableLoad03(){
+        try {
+            String sql = "SELECT YEAR (Date) as 'YEAR',MONTHNAME(Date)as 'Month',Grade as 'Tea Grade',SUM(Quantity)as 'Total Quantity',SUM(Total)as 'Total' FROM orders Group by YEAR(Date),MONTH(Date),Grade";
+            pst = con.prepareStatement(sql);
+            
+            rs = pst.executeQuery();
+            
+            reportTable.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+        }
+        
+        
+    }
+    
+    public void tableLoad04(){
+        try {
+            String sql = "SELECT o.OID,o.CID,c.cName,c.cCompany,o.Date,o.Grade,o.Quantity,o.Price,o.Total FROM orders o,customer c WHERE o.CID = c.CID Group by o.OID";
+            pst = con.prepareStatement(sql);
+            
+            rs = pst.executeQuery();
+            
+            orderReportTable.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+        }
+        
+        
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        addButton = new javax.swing.JButton();
+        viewButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        exitButton1 = new javax.swing.JButton();
+        hideBar2 = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        cidBox = new javax.swing.JComboBox<>();
+        qtyBox = new javax.swing.JTextField();
+        totBox = new javax.swing.JTextField();
+        calBtn = new javax.swing.JButton();
+        gradeBox = new javax.swing.JComboBox<>();
+        priceBox = new javax.swing.JTextField();
+        resetBtn = new javax.swing.JButton();
+        addBtn = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel18 = new javax.swing.JLabel();
+        demoBtn = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        oTable1 = new javax.swing.JTable();
+        cidSearch = new javax.swing.JTextField();
+        searchButton = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        totBox02 = new javax.swing.JTextField();
+        qtyBox02 = new javax.swing.JTextField();
+        gradeBox02 = new javax.swing.JComboBox<>();
+        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        cidBox02 = new javax.swing.JComboBox<>();
+        oidBox02 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        priceBox02 = new javax.swing.JTextField();
+        calBtn02 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        oTable2 = new javax.swing.JTable();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        reportTable = new javax.swing.JTable();
+        jLabel19 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        displayBtn1 = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        orderReportTable = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        oidReport = new javax.swing.JLabel();
+        cidReport = new javax.swing.JLabel();
+        nameReport = new javax.swing.JLabel();
+        companyReport = new javax.swing.JLabel();
+        dateReport = new javax.swing.JLabel();
+        gradeReport = new javax.swing.JLabel();
+        qtyReport = new javax.swing.JLabel();
+        priceReport = new javax.swing.JLabel();
+        totReport = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
+        displayBtn = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(119, 128, 11));
+
+        jButton1.setBackground(new java.awt.Color(119, 128, 11));
+        jButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Home");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        addButton.setBackground(new java.awt.Color(119, 128, 11));
+        addButton.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        addButton.setForeground(new java.awt.Color(255, 255, 255));
+        addButton.setText("Add Orders");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+
+        viewButton.setBackground(new java.awt.Color(119, 128, 11));
+        viewButton.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        viewButton.setForeground(new java.awt.Color(255, 255, 255));
+        viewButton.setText("View Orders");
+        viewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewButtonActionPerformed(evt);
+            }
+        });
+
+        updateButton.setBackground(new java.awt.Color(119, 128, 11));
+        updateButton.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        updateButton.setForeground(new java.awt.Color(255, 255, 255));
+        updateButton.setText("Update/Delete Orders");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+
+        jButton5.setBackground(new java.awt.Color(119, 128, 11));
+        jButton5.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.setText("Monthly Reports");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        exitButton.setBackground(new java.awt.Color(119, 128, 11));
+        exitButton.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        exitButton.setForeground(new java.awt.Color(255, 255, 255));
+        exitButton.setText("Exit");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
+
+        exitButton1.setBackground(new java.awt.Color(119, 128, 11));
+        exitButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        exitButton1.setForeground(new java.awt.Color(255, 255, 255));
+        exitButton1.setText("Order Report");
+        exitButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(viewButton, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(exitButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(viewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(exitButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(134, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 310, 580));
+
+        hideBar2.setBackground(new java.awt.Color(153, 204, 0));
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI Semibold", 0, 36)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BackOrder.jpg"))); // NOI18N
+
+        javax.swing.GroupLayout hideBar2Layout = new javax.swing.GroupLayout(hideBar2);
+        hideBar2.setLayout(hideBar2Layout);
+        hideBar2Layout.setHorizontalGroup(
+            hideBar2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        hideBar2Layout.setVerticalGroup(
+            hideBar2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(hideBar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 170));
+
+        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel1.setText("Order ID");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("Customer ID");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setText("Date");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel4.setText("Grade");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("Selling Qty (Kg)");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel6.setText("Price (1Kg)");
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setText("Total Cost (Rs)");
+
+        cidBox.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        cidBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select CID" }));
+
+        qtyBox.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+
+        totBox.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+
+        calBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        calBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/809611-16.png"))); // NOI18N
+        calBtn.setText("Cal");
+        calBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calBtnActionPerformed(evt);
+            }
+        });
+
+        gradeBox.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        gradeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Grade", "BOP", "BOPF", "FBOP", "FBOPF", "DUST", "GC", "OP" }));
+        gradeBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                gradeBoxPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+
+        priceBox.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        priceBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                priceBoxActionPerformed(evt);
+            }
+        });
+
+        resetBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        resetBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconfinder_Synchronize_27883.png"))); // NOI18N
+        resetBtn.setText("Reset");
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
+
+        addBtn.setBackground(new java.awt.Color(119, 128, 11));
+        addBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconfinder_Add_27831 (1).png"))); // NOI18N
+        addBtn.setText("Add");
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel8.setText("OID");
+
+        jDateChooser1.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Order-history-icon (1).png"))); // NOI18N
+
+        demoBtn.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
+        demoBtn.setText("Demo");
+        demoBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                demoBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(230, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(resetBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(demoBtn)
+                        .addGap(124, 124, 124))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(cidBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(gradeBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 168, Short.MAX_VALUE)
+                                .addComponent(qtyBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(totBox, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(calBtn)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(priceBox, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(59, Short.MAX_VALUE))))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(cidBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(gradeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(qtyBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(priceBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(totBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calBtn))
+                .addGap(63, 63, 63)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(resetBtn)
+                    .addComponent(addBtn)
+                    .addComponent(demoBtn))
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("tab1", jPanel3);
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        oTable1.setFont(new java.awt.Font("Segoe UI Semilight", 0, 14)); // NOI18N
+        oTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(oTable1);
+
+        cidSearch.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+
+        searchButton.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        searchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconfinder_Search_27877.png"))); // NOI18N
+        searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel15.setText("CID");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cidSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(searchButton)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cidSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchButton)
+                    .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(128, 128, 128))
+        );
+
+        jTabbedPane1.addTab("tab2", jPanel4);
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel9.setText("Order ID");
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel10.setText("Customer ID");
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel11.setText("Date");
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel12.setText("Grade");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel13.setText("Selling Qty (Kg)");
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel14.setText("Total Cost (Rs)");
+
+        totBox02.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+
+        qtyBox02.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+
+        gradeBox02.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        gradeBox02.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Grade", "BOP", "BOPF", "FBOP", "FBOPF", "DUST", "GC", "OP" }));
+        gradeBox02.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                gradeBox02PopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+
+        jDateChooser2.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+
+        cidBox02.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        cidBox02.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select CID" }));
+        cidBox02.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cidBox02ActionPerformed(evt);
+            }
+        });
+
+        oidBox02.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        oidBox02.setText("OID");
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel16.setText("Price (1Kg)");
+
+        priceBox02.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        priceBox02.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                priceBox02ActionPerformed(evt);
+            }
+        });
+
+        calBtn02.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        calBtn02.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/809611-16.png"))); // NOI18N
+        calBtn02.setText("Cal");
+        calBtn02.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calBtn02ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconfinder_Refresh_27873.png"))); // NOI18N
+        jButton2.setText("Update");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconfinder_Remove_27874.png"))); // NOI18N
+        jButton3.setText("Delete");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        oTable2.setFont(new java.awt.Font("Segoe UI Semilight", 0, 14)); // NOI18N
+        oTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        oTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                oTable2MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(oTable2);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel10))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(oidBox02)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(cidBox02, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jDateChooser2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(gradeBox02, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(qtyBox02, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(totBox02, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(priceBox02, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(calBtn02))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton2)
+                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(28, 28, 28))))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(oidBox02, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(cidBox02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11)
+                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(gradeBox02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(qtyBox02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16)
+                    .addComponent(priceBox02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(totBox02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calBtn02)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(88, 88, 88))
+        );
+
+        jTabbedPane1.addTab("tab3", jPanel5);
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+
+        reportTable.setFont(new java.awt.Font("Segoe UI Semilight", 0, 14)); // NOI18N
+        reportTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(reportTable);
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
+        jLabel19.setText("Monthly Orders Report");
+
+        jButton4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconfinder_printer_39263.png"))); // NOI18N
+        jButton4.setText("Print Report");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        displayBtn1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        displayBtn1.setText("Display Report");
+        displayBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayBtn1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel19)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(displayBtn1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(72, 72, 72)
+                .addComponent(jLabel19)
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(displayBtn1)
+                .addContainerGap(123, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("tab4", jPanel6);
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+
+        orderReportTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        orderReportTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                orderReportTableMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(orderReportTable);
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Order Invoice", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Semibold", 0, 18))); // NOI18N
+
+        jLabel20.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel20.setText("OID");
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel21.setText("CID");
+
+        jLabel22.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel22.setText("Customer Name");
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel23.setText("Broker Company");
+
+        jLabel24.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel24.setText("Date");
+
+        jLabel25.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel25.setText("Tea Grade");
+
+        jLabel26.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel26.setText("Quantity");
+
+        jLabel27.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel27.setText("Price (1Kg)");
+
+        jLabel28.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel28.setText("Total (Rs.)");
+
+        oidReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        oidReport.setToolTipText("");
+
+        cidReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        cidReport.setToolTipText("");
+
+        nameReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        nameReport.setToolTipText("");
+
+        companyReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        companyReport.setToolTipText("");
+
+        dateReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        dateReport.setToolTipText("");
+
+        gradeReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        gradeReport.setToolTipText("");
+
+        qtyReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        qtyReport.setToolTipText("");
+
+        priceReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        priceReport.setToolTipText("");
+
+        totReport.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        totReport.setToolTipText("");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(194, 194, 194)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel23)
+                        .addGap(18, 18, 18)
+                        .addComponent(companyReport, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(oidReport, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+                            .addComponent(cidReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(nameReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel28)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel25, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dateReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(gradeReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(qtyReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(priceReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(totReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(oidReport))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(cidReport))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nameReport))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel23)
+                    .addComponent(companyReport))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(dateReport))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(gradeReport))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(qtyReport))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(priceReport))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel28)
+                    .addComponent(totReport))
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+
+        jButton6.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconfinder_printer_39263.png"))); // NOI18N
+        jButton6.setText("Print Invoice");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        displayBtn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        displayBtn.setText("Display Invoice");
+        displayBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(displayBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(displayBtn)
+                        .addGap(65, 65, 65)))
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("tab5", jPanel7);
+
+        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 880, 610));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        setSize(new java.awt.Dimension(1228, 797));
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        
+        CustomerOrdersMain com = new CustomerOrdersMain();
+        com.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_exitButtonActionPerformed
+
+    private void priceBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_priceBoxActionPerformed
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(0);
+    }//GEN-LAST:event_addButtonActionPerformed
+
+    private void viewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewButtonActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(1);
+    }//GEN-LAST:event_viewButtonActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        // TODO add your handling code here:
+        
+        int x = JOptionPane.showConfirmDialog(null, "Do you want to Add Order ?");
+
+        if(x==0){
+        
+        String cid = cidBox.getSelectedItem().toString();
+        
+        if(cid == "Select CID"){
+            JOptionPane.showMessageDialog(null,"Please, Select CID","Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+       
+        String date =  "";    
+            try {
+                Date date1 = jDateChooser1.getDate();
+                SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+                date = dFormat.format(date1);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,"Please, Select The Date", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+          
+          
+        String grade = gradeBox.getSelectedItem().toString();
+        
+        if(grade == "Select Grade"){
+            JOptionPane.showMessageDialog(null,"Please, Select Tea Grade", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String qty = qtyBox.getText();
+        String price = priceBox.getText();
+        String total = totBox.getText();
+        
+      
+        Pattern numbers = Pattern.compile("^[0-9]+$");
+        
+        Matcher qty1 = numbers.matcher(qty);
+        Matcher price1 = numbers.matcher(price);
+        Matcher total1 = numbers.matcher(total);
+   
+        
+        if(!qty1.find()){
+            JOptionPane.showMessageDialog(null, "Please Enter Valid Quantity", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(!price1.find()){
+            JOptionPane.showMessageDialog(null, "Please Enter Valid Price", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(!(Pattern.matches("^[0-9]+[.]{1}+[0-9]+$", totBox.getText()))){
+            JOptionPane.showMessageDialog(null, "Click The Calculate Button", "Error", JOptionPane.ERROR_MESSAGE);
+           return;
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Successfully, Added A New Order",  "Good!", JOptionPane.INFORMATION_MESSAGE);
+            
+        }
+        
+        try {
+            String q = "INSERT INTO orders (CID,Date,Grade,Quantity,Price,Total) VALUES ('"+ cid +"','"+ date +"','"+ grade +"','"+ qty +"','"+ price +"','"+ total +"')";
+            pst = con.prepareStatement(q);
+            pst.execute();
+            
+             tableLoad01();
+            tableLoad02();
+            tableLoad03();
+            tableLoad04();
+        
+            clear();
+            
+            String q1 = "INSERT INTO pro_oder (od_id,Date,Grade,Quantity) VALUES ('"+ cid +"','"+ date +"','"+ grade +"','"+ qty +"')";
+            pst = con.prepareStatement(q1);
+            pst.execute();
+            
+           
+        } catch (Exception e) {
+            System.out.println("Not Insert");
+        }
+        }
+    }//GEN-LAST:event_addBtnActionPerformed
+
+    private void calBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calBtnActionPerformed
+        
+//        String x = qtyBox.getText();
+//        int a = Integer.parseInt(x);
+//        String y = priceBox.getText();
+//        int b = Integer.parseInt(y);
+//        int r = a*b;
+//        String z = Integer.toString(r);
+//        totBox.setText(z);
+
+          double qty = Double.parseDouble(qtyBox.getText());
+          double price = Double.parseDouble(priceBox.getText());
+          double cost  = qty*price;
+          
+          String z = Double.toString(cost);
+          totBox.setText(z);
+          
+          
+    }//GEN-LAST:event_calBtnActionPerformed
+
+    private void priceBox02ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceBox02ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_priceBox02ActionPerformed
+
+    private void calBtn02ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calBtn02ActionPerformed
+        // TODO add your handling code here:
+        
+          double qty = Double.parseDouble(qtyBox02.getText());
+          double price = Double.parseDouble(priceBox02.getText());
+          double cost  = qty*price;
+          
+          String z = Double.toString(cost);
+          totBox02.setText(z);
+    }//GEN-LAST:event_calBtn02ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        int x = JOptionPane.showConfirmDialog(null, "Do you want to Update ?");
+
+        if(x==0){
+
+            String oid = oidBox02.getText();
+            String cid = cidBox02.getSelectedItem().toString();
+      //date
+        //    String date  = jDateChooser2.getDate().toString();
+      
+            SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String date = dFormat.format(jDateChooser2.getDate());
+            
+        
+        
+            String grade  = gradeBox02.getSelectedItem().toString();
+            String qty = qtyBox02.getText();
+            String price = priceBox02.getText();
+            String total = totBox02.getText();
+//,Date = '"+ date +"'
+            String sql = "UPDATE orders SET CID = '"+ cid +"',Date = '"+ date +"',Grade = '"+ grade +"',Quantity = '"+ qty +"',Price = '"+ price +"',Total = '"+ total +"' WHERE OID = '"+ oid +"'";
+            try {
+                pst = con.prepareStatement(sql);
+                pst.execute();
+
+                //load updated table
+                tableLoad01();
+                tableLoad02();
+                tableLoad03();
+                tableLoad04();
+            
+                //clear fields
+                clear2();
+            } catch (Exception e) {
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+        int x = JOptionPane.showConfirmDialog(null, "Do you want to Delete ?");
+
+        if(x==0){
+
+            String oid = oidBox02.getText();
+
+            String sql = "DELETE FROM orders WHERE OID = '"+ oid +"'";
+            try {
+                pst = con.prepareStatement(sql);
+                pst.execute();
+
+                //load updated table
+                tableLoad01();
+                tableLoad02();
+                tableLoad03();
+                tableLoad04();
+                clear2();
+            } catch (Exception e) {
+            }
+
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void oTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_oTable2MouseClicked
+
+        int r  = oTable2.getSelectedRow();
+
+        String oid  = oTable2.getValueAt(r, 0).toString();
+        String cid  = oTable2.getValueAt(r, 1).toString();
+        Date date  = (Date)oTable2.getValueAt(r, 2);
+        String grade  = oTable2.getValueAt(r, 3).toString();
+        String qty  = oTable2.getValueAt(r, 4).toString();
+        String price  = oTable2.getValueAt(r, 5).toString();
+        String total  = oTable2.getValueAt(r, 6).toString();
+
+        oidBox02.setText(oid);
+        cidBox02.setSelectedItem(cid);
+    //date
+        jDateChooser2.setDate(date);
+        gradeBox02.setSelectedItem(grade);
+        qtyBox02.setText(qty);
+        priceBox02.setText(price);
+        totBox02.setText(total);
+       
+        
+
+    }//GEN-LAST:event_oTable2MouseClicked
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        // TODO add your handling code here:
+        
+        String cid  = cidSearch.getText();
+        
+        String sql = "SELECT OID,CID,Date,Grade,Quantity,Price,Total FROM orders WHERE CID LIKE '%"+ cid +"%'";
+        
+        try {
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+        
+            oTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+        }
+        
+        
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
+        // TODO add your handling code here:
+        
+        cidBox.setSelectedIndex(0);
+        jDateChooser1.setDate(null);
+        gradeBox.setSelectedIndex(0);
+        qtyBox.setText("");
+        priceBox.setText("");
+        totBox.setText("");
+    }//GEN-LAST:event_resetBtnActionPerformed
+
+    private void cidBox02ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cidBox02ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cidBox02ActionPerformed
+
+    private void gradeBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_gradeBoxPopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+        String temp = (String)gradeBox.getSelectedItem();
+        String sql = "SELECT * FROM prices WHERE Grade = ?";
+        try {
+            pst = con.prepareStatement(sql);
+            pst.setString(1, temp);
+            rs = pst.executeQuery();
+            if(rs.next()){
+                String add1 = rs.getString("Price");
+                priceBox.setText(add1);
+            }
+            
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_gradeBoxPopupMenuWillBecomeInvisible
+
+    private void gradeBox02PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_gradeBox02PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+        String temp = (String)gradeBox02.getSelectedItem();
+        String sql = "SELECT * FROM prices WHERE Grade = ?";
+        try {
+            pst = con.prepareStatement(sql);
+            pst.setString(1, temp);
+            rs = pst.executeQuery();
+            if(rs.next()){
+                String add1 = rs.getString("Price");
+                priceBox02.setText(add1);
+            }
+            
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_gradeBox02PopupMenuWillBecomeInvisible
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(3);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            String sql = "SELECT YEAR (Date) as 'YEAR',MONTHNAME(Date)as 'Month',Grade as 'Tea Grade',SUM(Quantity)as 'Total Quantity',SUM(Total)as 'Total' FROM orders Group by YEAR(Date),MONTH(Date),Grade";
+            pst = con.prepareStatement(sql);
+            
+            rs = pst.executeQuery();
+            
+    //        reportTable.setModel(DbUtils.resultSetToTableModel(rs));
+    
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int colNo = rsmd.getColumnCount();
+            
+            int rowNo = 0;
+            while(rs.next()){
+                rowNo++;
+            }
+            rs.first();
+            
+            Document document = new Document() ;
+            PdfWriter.getInstance(document, new FileOutputStream("MonthlyOrdersReport.pdf"));
+            
+            document.open();
+            Image img = Image.getInstance("reporthead.png");
+            img.scaleToFit(500, 2500);
+            document.add(img);
+            
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                                                                                                Date: "+new Date().toString()));
+            document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------  "));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                                                           Monthly Orders ",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLUE)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("  "));
+            
+            
+            
+            PdfPTable table = new PdfPTable(5);
+            table.addCell("Year");
+            table.addCell("Month");
+            table.addCell("Tea Grade");
+            table.addCell("Total Quantity");
+            table.addCell("Total(Rs)");
+            
+            for(int i = 0; i < rowNo; i++){
+                table.addCell(""+rs.getString(1));
+                table.addCell(""+rs.getString(2));
+                table.addCell(""+rs.getString(3));
+                table.addCell(""+rs.getString(4));
+                table.addCell(""+rs.getString(5));
+                rs.next();
+            }
+            
+            
+            document.add(table);
+            
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("  "));
+           
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                ...................................                                              ...................................",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            
+            document.add(new Paragraph("                       Prepared By                                                            Checked By",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                This is an Automatic Generated Invoice.   If there is any problem ,Please contact us..."));
+            document.add(new Paragraph("                 Phone no : 0452274364   Fax : +94 (0)  45 2262210   Email : galpaditenna@gmail.com"));
+            
+            
+            document.close();
+            
+            
+            JOptionPane.showMessageDialog(null, "Report Generated Successfully");
+        }
+        
+        
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error ,Report Not Generated");
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void exitButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButton1ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(4);
+    }//GEN-LAST:event_exitButton1ActionPerformed
+
+    private void orderReportTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderReportTableMouseClicked
+        // TODO add your handling code here:
+        int r  = orderReportTable.getSelectedRow();
+
+        String oid  = orderReportTable.getValueAt(r, 0).toString();
+        String cid  = orderReportTable.getValueAt(r, 1).toString();
+        String name = orderReportTable.getValueAt(r, 2).toString();
+        String company = orderReportTable.getValueAt(r, 3).toString();
+        String date  = orderReportTable.getValueAt(r, 4).toString();
+        String grade  = orderReportTable.getValueAt(r, 5).toString();
+        String qty  = orderReportTable.getValueAt(r, 6).toString();
+        String price  = orderReportTable.getValueAt(r, 7).toString();
+        String total  = orderReportTable.getValueAt(r, 8).toString();
+        
+        
+        oidReport.setText(oid);
+        cidReport.setText(cid);
+        nameReport.setText(name);
+        companyReport.setText(company);
+        dateReport.setText(date);
+        gradeReport.setText(grade);
+        qtyReport.setText(qty);
+        priceReport.setText(price);
+        totReport.setText(total);
+       
+    }//GEN-LAST:event_orderReportTableMouseClicked
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        try {
+            
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("CustomerInvoice.pdf"));
+            
+            document.open();
+            Image img = Image.getInstance("reporthead.png");
+            img.scaleToFit(500,2500);
+            document.add(img);
+            
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                                                                                                Date: "+new Date().toString()));
+            document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------  "));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                                         Customer Invoice ",FontFactory.getFont(FontFactory.TIMES_BOLD, 18,Font.BOLD, BaseColor.BLUE)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Order ID                                :       "        +oidReport.getText()+ "",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Customer ID                          :       "        +cidReport.getText()+ "",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Customer Name                     :       "        +nameReport.getText()+ "",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Broker Company                   :       "        +companyReport.getText()+ "",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Date                                         :       "        +dateReport.getText()+ "",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Tea Grade                               :       "        +gradeReport.getText()+ "",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Quantity                                  :       "        +qtyReport.getText()+ "Kg",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Price                                        :       Rs. "        +priceReport.getText()+ "",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                Total Amount                         :       Rs. "        +totReport.getText()+ "",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+           
+            document.add(new Paragraph("  "));
+           
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                ...................................                                              ...................................",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            
+            document.add(new Paragraph("                       Prepared By                                                            Checked By",FontFactory.getFont(FontFactory.TIMES_BOLD, 14,Font.BOLD, BaseColor.BLACK)));
+            document.add(new Paragraph("  "));
+            document.add(new Paragraph("                This is an Automatic Generated Invoice.   If there is any problem ,Please contact us..."));
+            document.add(new Paragraph("                 Phone no : 0452274364   Fax : +94 (0)  45 2262210   Email : galpaditenna@gmail.com"));
+            
+            
+            
+            
+            
+            
+            document.close();
+            JOptionPane.showMessageDialog(null, "Invoice printed Successfully");
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error ,Invoice Not Generated");
+        }
+        
+        
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void displayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayBtnActionPerformed
+        // TODO add your handling code here:
+        try {
+            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +"C:\\Users\\User\\Documents\\NetBeansProjects\\teaProject\\CustomerInvoice.pdf");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Check File Details");
+        }
+        
+    }//GEN-LAST:event_displayBtnActionPerformed
+
+    private void displayBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayBtn1ActionPerformed
+        // TODO add your handling code here:
+        
+         try {
+            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +"C:\\Users\\User\\Documents\\NetBeansProjects\\teaProject\\MonthlyOrdersReport.pdf");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Check File Details");
+        }
+    }//GEN-LAST:event_displayBtn1ActionPerformed
+
+    private void demoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoBtnActionPerformed
+        // TODO add your handling code here:
+        demoOrder();
+    }//GEN-LAST:event_demoBtnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MainPage main = new MainPage();
+        main.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(OrderDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(OrderDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(OrderDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(OrderDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new OrderDetails().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addBtn;
+    private javax.swing.JButton addButton;
+    private javax.swing.JButton calBtn;
+    private javax.swing.JButton calBtn02;
+    private javax.swing.JComboBox<String> cidBox;
+    private javax.swing.JComboBox<String> cidBox02;
+    private javax.swing.JLabel cidReport;
+    private javax.swing.JTextField cidSearch;
+    private javax.swing.JLabel companyReport;
+    private javax.swing.JLabel dateReport;
+    private javax.swing.JButton demoBtn;
+    private javax.swing.JButton displayBtn;
+    private javax.swing.JButton displayBtn1;
+    private javax.swing.JButton exitButton;
+    private javax.swing.JButton exitButton1;
+    private javax.swing.JComboBox<String> gradeBox;
+    private javax.swing.JComboBox<String> gradeBox02;
+    private javax.swing.JLabel gradeReport;
+    private javax.swing.JPanel hideBar2;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel nameReport;
+    private javax.swing.JTable oTable1;
+    private javax.swing.JTable oTable2;
+    private javax.swing.JLabel oidBox02;
+    private javax.swing.JLabel oidReport;
+    private javax.swing.JTable orderReportTable;
+    private javax.swing.JTextField priceBox;
+    private javax.swing.JTextField priceBox02;
+    private javax.swing.JLabel priceReport;
+    private javax.swing.JTextField qtyBox;
+    private javax.swing.JTextField qtyBox02;
+    private javax.swing.JLabel qtyReport;
+    private javax.swing.JTable reportTable;
+    private javax.swing.JButton resetBtn;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JTextField totBox;
+    private javax.swing.JTextField totBox02;
+    private javax.swing.JLabel totReport;
+    private javax.swing.JButton updateButton;
+    private javax.swing.JButton viewButton;
+    // End of variables declaration//GEN-END:variables
+}
